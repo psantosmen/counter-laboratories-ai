@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Counter-labs in Brazil — concept map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root{
+    --ink:#101a17;
+    --panel:#16221e;
+    --panel-2:#1c2b26;
+    --paper:#efece2;
+    --paper-dim:#a9b3ac;
+    --line:#2a3a34;
+    --academia:#5c7fc4;
+    --sociedade:#c7622f;
+    --movimentos:#9b5fc0;
+    --jornalismo:#3f9c6b;
+    --infra:#d0a23a;
+    --conceito:#7f9089;
+    --conceito-glow:#a9bcae;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%; width:100%;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    overflow:hidden;
+  }
+  #app{
+    display:grid;
+    grid-template-columns: 300px 1fr;
+    height:100vh; width:100vw;
+  }
+  /* ---------- Sidebar ---------- */
+  #sidebar{
+    background:var(--panel);
+    border-right:1px solid var(--line);
+    padding:22px 20px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    overflow-y:auto;
+    z-index:5;
+  }
+  header h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:22px;
+    line-height:1.15;
+    margin:0 0 6px;
+    color:var(--paper);
+  }
+  header p{
+    margin:0;
+    font-size:12.5px;
+    line-height:1.5;
+    color:var(--paper-dim);
+  }
+  .section-label{
+    font-size:11px;
+    letter-spacing:0.02em;
+    color:var(--paper-dim);
+    margin:0 0 8px;
+    font-weight:500;
+  }
+  #search{
+    width:100%;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    color:var(--paper);
+    padding:9px 12px;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    outline:none;
+  }
+  #search::placeholder{color:var(--paper-dim);}
+  #search:focus{border-color:var(--conceito-glow);}
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:6px 8px;
+    border-radius:7px;
+    cursor:pointer;
+    font-size:12.5px;
+    color:var(--paper);
+    user-select:none;
+    transition:background .15s ease;
+  }
+  .legend-item:hover{background:var(--panel-2);}
+  .legend-item.off{opacity:0.35;}
+  .swatch{
+    width:11px; height:11px; border-radius:50%; flex:0 0 auto;
+  }
+  .legend-count{
+    margin-left:auto;
+    font-size:11px;
+    color:var(--paper-dim);
+  }
+  #stats{
+    font-size:12px;
+    color:var(--paper-dim);
+    line-height:1.6;
+    border-top:1px solid var(--line);
+    padding-top:14px;
+  }
+  #stats b{color:var(--paper); font-weight:600;}
+  .btn{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    font-size:12.5px;
+    padding:8px 10px;
+    border-radius:7px;
+    cursor:pointer;
+    text-align:left;
+  }
+  .btn:hover{border-color:var(--conceito-glow);}
+  /* ---------- Graph area ---------- */
+  #graph-wrap{
+    position:relative;
+    overflow:hidden;
+  }
+  svg{width:100%; height:100%; display:block; cursor:grab;}
+  svg:active{cursor:grabbing;}
+  .link{
+    stroke:#4a5a53;
+    stroke-opacity:0.45;
+  }
+  .link.dim{ stroke-opacity:0.06; }
+  .link.lit{ stroke:var(--paper); stroke-opacity:0.85; }
+  .node circle{
+    stroke:var(--ink);
+    stroke-width:1.2px;
+    cursor:pointer;
+  }
+  .node.dim{ opacity:0.12; }
+  .node text{
+    font-family:'Inter',sans-serif;
+    font-size:10.5px;
+    fill:var(--paper);
+    pointer-events:none;
+    paint-order:stroke;
+    stroke:var(--ink);
+    stroke-width:3px;
+    stroke-linejoin:round;
+  }
+  .node.concept text{ fill:var(--paper-dim); font-size:9.5px; }
+  .node.lit text{ fill:var(--paper); font-weight:600; }
+  /* top-right controls */
+  #controls{
+    position:absolute; top:16px; right:16px;
+    display:flex; gap:8px; z-index:4;
+  }
+  .icon-btn{
+    background:rgba(22,34,30,0.85);
+    border:1px solid var(--line);
+    color:var(--paper);
+    width:32px; height:32px;
+    border-radius:7px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    font-size:15px;
+    backdrop-filter:blur(4px);
+  }
+  .icon-btn:hover{border-color:var(--conceito-glow);}
+  /* detail panel */
+  #detail{
+    position:absolute; top:0; right:0; bottom:0;
+    width:340px;
+    background:rgba(22,34,30,0.97);
+    border-left:1px solid var(--line);
+    transform:translateX(100%);
+    transition:transform .25s ease;
+    padding:24px 22px;
+    overflow-y:auto;
+    z-index:6;
+  }
+  #detail.open{ transform:translateX(0); }
+  #detail .close{
+    position:absolute; top:16px; right:16px;
+    background:none; border:none; color:var(--paper-dim);
+    font-size:18px; cursor:pointer;
+  }
+  #detail .tag{
+    display:inline-block;
+    font-size:10.5px;
+    padding:3px 9px;
+    border-radius:100px;
+    margin:0 6px 6px 0;
+    color:var(--ink);
+    font-weight:600;
+  }
+  #detail h2{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:21px;
+    margin:14px 0 4px;
+    line-height:1.2;
+  }
+  #detail .meta{
+    font-size:12px;
+    color:var(--paper-dim);
+    margin-bottom:14px;
+    line-height:1.6;
+  }
+  #detail .block{ margin-bottom:16px; }
+  #detail .block h4{
+    font-size:11px;
+    text-transform:none;
+    color:var(--paper-dim);
+    margin:0 0 6px;
+    font-weight:600;
+  }
+  #detail .block p{
+    font-size:13px;
+    line-height:1.55;
+    margin:0;
+    color:var(--paper);
+  }
+  #detail .related{
+    display:flex; flex-wrap:wrap; gap:6px;
+  }
+  #detail .chip{
+    font-size:11.5px;
+    padding:5px 10px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:100px;
+    cursor:pointer;
+    color:var(--paper);
+  }
+  #detail .chip:hover{border-color:var(--conceito-glow);}
+  #detail a{ color:var(--paper); }
+  #tooltip{
+    position:absolute;
+    pointer-events:none;
+    background:rgba(16,26,23,0.95);
+    border:1px solid var(--line);
+    color:var(--paper);
+    font-size:12px;
+    padding:6px 10px;
+    border-radius:6px;
+    max-width:220px;
+    opacity:0;
+    transition:opacity .12s ease;
+    z-index:7;
+  }
+  ::-webkit-scrollbar{ width:8px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line); border-radius:4px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="sidebar">
+    <header>
+      <h1>Counter-labs in Brazil</h1>
+      <p>A network of initiatives and the concepts that bring them together — academia, civil society, movements, journalism and coalitions working on technology, data and AI.</p>
+    </header>
+
+    <div>
+      <p class="section-label">Search</p>
+      <input id="search" type="text" placeholder="Name or concept..." autocomplete="off">
+    </div>
+
+    <div>
+      <p class="section-label">Categories</p>
+      <div id="legend"></div>
+    </div>
+
+    <button class="btn" id="reset-btn">↺ Clear selection and recenter</button>
+
+    <div id="stats"></div>
+  </div>
+
+  <div id="graph-wrap">
+    <div id="controls">
+      <div class="icon-btn" id="zoom-in" title="Zoom in">+</div>
+      <div class="icon-btn" id="zoom-out" title="Zoom out">–</div>
+    </div>
+    <svg id="graph"></svg>
+    <div id="tooltip"></div>
+    <div id="detail">
+      <button class="close" id="detail-close">✕</button>
+      <div id="detail-content"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ CONFIG ============
+const CAT_COLORS = {
+  'academia': '#5c7fc4',
+  'sociedade-civil': '#c7622f',
+  'movimentos-coletivos': '#9b5fc0',
+  'jornalismo-monitoramento': '#3f9c6b',
+  'infraestrutura-civica': '#d0a23a',
+};
+const CAT_LABELS = {
+  'academia': 'Academia',
+  'sociedade-civil': 'Civil society — digital rights',
+  'movimentos-coletivos': 'Movements and collectives',
+  'jornalismo-monitoramento': 'Journalism and monitoring',
+  'infraestrutura-civica': 'Civic infrastructure and coalitions',
+};
+const CONCEPT_COLOR = '#7f9089';
+
+// placeholder marker to locate insertion point below
+const GRAPH_DATA = {"nodes": [{"id": "i:LAVITS", "label": "LAVITS", "type": "iniciativa", "categoria": "Academia", "cat_slug": "academia", "natureza_ator": "Academic-civil network", "cidade": "Distributed network", "uf": "Several", "escala": "Brazil and Latin America", "relacao_com_ia": "Relevant", "aderencia": "Core", "justificativa": "Connects critical knowledge production, civil society and conceptual experimentation on digital infrastructures.", "sintese": "A Latin American network linking academic research and civil society around surveillance, technology and society, producing exchange, training and technopolitical critique.", "url": "https://lavits.org/a-lavits-pt/"}, {"id": "c:vigilância", "label": "surveillance", "type": "conceito"}, {"id": "c:tecnologia", "label": "technology", "type": "conceito"}, {"id": "c:sociedade", "label": "society", "type": "conceito"}, {"id": "c:dados", "label": "data", "type": "conceito"}, {"id": "c:poder", "label": "power", "type": "conceito"}, {"id": "i:MediaLab.UFRJ", "label": "MediaLab.UFRJ", "type": "iniciativa", "categoria": "Academia", "cat_slug": "academia", "natureza_ator": "Academic laboratory", "cidade": "Rio de Janeiro", "uf": "RJ", "escala": "Local, national and international", "relacao_com_ia": "Central", "aderencia": "Core", "justificativa": "Experiments with methods and languages to make algorithmic controversies visible and respond to present-day political urgencies.", "sintese": "An experimental, transdisciplinary lab exploring the relationships between technopolitics, subjectivities and visibilities, using digital methods and data analysis and visualization in the humanities.", "url": "https://dev.pr2.ufrj.br/lista-laboratorios/cfch"}, {"id": "c:tecnopolítica", "label": "technopolitics", "type": "conceito"}, {"id": "c:subjetividade", "label": "subjectivity", "type": "conceito"}, {"id": "c:visibilidade", "label": "visibility", "type": "conceito"}, {"id": "c:algoritmos", "label": "algorithms", "type": "conceito"}, {"id": "c:métodos digitais", "label": "digital methods", "type": "conceito"}, {"id": "i:NetLab UFRJ", "label": "NetLab UFRJ", "type": "iniciativa", "categoria": "Academia", "cat_slug": "academia", "natureza_ator": "Academic laboratory", "cidade": "Rio de Janeiro", "uf": "RJ", "escala": "National", "relacao_com_ia": "Central", "aderencia": "Strong", "justificativa": "Produces critical diagnosis and evidence about digital systems, with more emphasis on research and governance than on alternative infrastructure.", "sintese": "A multidisciplinary lab researching the internet, social media, disinformation and algorithms, producing empirical evidence for public debate and technology governance.", "url": "https://netlab.eco.ufrj.br/sobre"}, {"id": "c:desinformação", "label": "disinformation", "type": "conceito"}, {"id": "c:redes sociais", "label": "social media", "type": "conceito"}, {"id": "c:governança", "label": "governance", "type": "conceito"}, {"id": "c:evidência empírica", "label": "empirical evidence", "type": "conceito"}, {"id": "i:Pimentalab", "label": "Pimentalab", "type": "iniciativa", "categoria": "Academia", "cat_slug": "academia", "natureza_ator": "Academic laboratory", "cidade": "Guarulhos", "uf": "SP", "escala": "Local and national", "relacao_com_ia": "Relevant", "aderencia": "Core", "justificativa": "Integrates critique of the technical order, situated research and collective experimentation with other ways of knowing and living.", "sintese": "A transdisciplinary lab for situated research on knowledge, technopolitics, conflict and social struggles, oriented toward cooperation, care and the production of the commons.", "url": "https://www.pimentalab.net/about-us/"}, {"id": "c:tecnopolíticas", "label": "technopolitics", "type": "conceito"}, {"id": "c:saber-poder", "label": "knowledge-power", "type": "conceito"}, {"id": "c:infraestruturas", "label": "infrastructures", "type": "conceito"}, {"id": "c:comum", "label": "the commons", "type": "conceito"}, {"id": "c:cosmotécnicas", "label": "cosmotechnics", "type": "conceito"}, {"id": "i:LabLivre", "label": "LabLivre", "type": "iniciativa", "categoria": "Academia", "cat_slug": "academia", "natureza_ator": "Academic laboratory", "cidade": "Santo André", "uf": "SP", "escala": "Local and national", "relacao_com_ia": "Relevant", "aderencia": "Core", "justificativa": "Links research and communities in producing free technologies and open forms of knowledge.", "sintese": "A university space for research and exchange between academic knowledge and technology communities, focused on free technologies, digital culture and shared knowledge production.", "url": "https://lablivre.pesquisa.ufabc.edu.br/"}, {"id": "c:tecnologias livres", "label": "free technologies", "type": "conceito"}, {"id": "c:software livre", "label": "free software", "type": "conceito"}, {"id": "c:cultura digital", "label": "digital culture", "type": "conceito"}, {"id": "c:conhecimento aberto", "label": "open knowledge", "type": "conceito"}, {"id": "c:comunidade", "label": "community", "type": "conceito"}, {"id": "i:Data Privacy Brasil", "label": "Data Privacy Brasil", "type": "iniciativa", "categoria": "Civil society — digital rights", "cat_slug": "sociedade-civil", "natureza_ator": "Civil society organization", "cidade": "São Paulo", "uf": "SP", "escala": "National and international", "relacao_com_ia": "Central", "aderencia": "Strong", "justificativa": "Produces knowledge and critical advocacy on data and AI, with a main focus on rights, regulation and training.", "sintese": "An organization combining teaching, research and advocacy to promote fundamental rights, social justice and the reduction of asymmetries in datafication and technology governance.", "url": "https://www.dataprivacybr.org/institucional/"}, {"id": "c:proteção de dados", "label": "data protection", "type": "conceito"}, {"id": "c:regulação", "label": "regulation", "type": "conceito"}, {"id": "c:datificação", "label": "datafication", "type": "conceito"}, {"id": "c:assimetrias de poder", "label": "power asymmetries", "type": "conceito"}, {"id": "i:LAPIN", "label": "LAPIN", "type": "iniciativa", "categoria": "Civil society — digital rights", "cat_slug": "sociedade-civil", "natureza_ator": "Independent research and action center", "cidade": "Brasília", "uf": "DF", "escala": "National and Latin American", "relacao_com_ia": "Central", "aderencia": "Core", "justificativa": "Combines independent research, training and political action to intervene in sociotechnical governance.", "sintese": "An independent center researching the social, ethical and legal impacts of digital technologies, acting through training, communication and public-policy advocacy.", "url": "https://lapin.org.br/sobre-nos/"}, {"id": "c:inteligência artificial", "label": "artificial intelligence", "type": "conceito"}, {"id": "c:governança de dados", "label": "data governance", "type": "conceito"}, {"id": "c:direitos digitais", "label": "digital rights", "type": "conceito"}, {"id": "i:Instituto Nupef", "label": "Instituto Nupef", "type": "iniciativa", "categoria": "Civil society — digital rights", "cat_slug": "sociedade-civil", "natureza_ator": "Civil society organization", "cidade": "Rio de Janeiro", "uf": "RJ", "escala": "National", "relacao_com_ia": "Indirect", "aderencia": "Core", "justificativa": "Builds and sustains autonomous digital infrastructure with movements and communities, reducing dependence on dominant platforms.", "sintese": "An organization promoting safe technology use, connectivity, territorial protection and resilient infrastructures, linking traditional and specialized knowledge to strengthen citizenship and social movements.", "url": "https://nupef.org.br/quem-somos-2/"}, {"id": "c:conectividade", "label": "connectivity", "type": "conceito"}, {"id": "c:segurança da informação", "label": "information security", "type": "conceito"}, {"id": "c:proteção territorial", "label": "territorial protection", "type": "conceito"}, {"id": "c:cidadania", "label": "citizenship", "type": "conceito"}, {"id": "c:infraestruturas resilientes", "label": "resilient infrastructures", "type": "conceito"}, {"id": "i:Instituto da Hora", "label": "Instituto da Hora", "type": "iniciativa", "categoria": "Civil society — digital rights", "cat_slug": "sociedade-civil", "natureza_ator": "Civil society organization", "cidade": "Not reported", "uf": "Not reported", "escala": "National", "relacao_com_ia": "Central", "aderencia": "Core", "justificativa": "Combines scientific knowledge, Black and Indigenous perspectives and advocacy to contest narratives and technological solutions.", "sintese": "An antiracist organization that decentralizes scientific knowledge, working with research, data, artificial intelligence and cybersecurity, and advocating for technological sovereignty and the emancipation of digital rights.", "url": "https://www.institutodahora.com/"}, {"id": "c:soberania tecnológica", "label": "technological sovereignty", "type": "conceito"}, {"id": "c:cibersegurança", "label": "cybersecurity", "type": "conceito"}, {"id": "i:Coding Rights", "label": "Coding Rights", "type": "iniciativa", "categoria": "Movements and collectives", "cat_slug": "movimentos-coletivos", "natureza_ator": "Feminist organization", "cidade": "Distributed network", "uf": "Several", "escala": "Local and international", "relacao_com_ia": "Central", "aderencia": "Core", "justificativa": "Links critique, political imagination and feminist technical construction across local and global networks.", "sintese": "A feminist organization combining hacker knowledge, research, advocacy, storytelling, tool development and digital care to challenge power inequalities in technology.", "url": "https://codingrights.org/sobre-o-coding-rights/"}, {"id": "c:tecnologias e feminismos", "label": "technologies and feminisms", "type": "conceito"}, {"id": "c:direitos humanos", "label": "human rights", "type": "conceito"}, {"id": "c:cuidado digital", "label": "digital care", "type": "conceito"}, {"id": "c:imaginação política", "label": "political imagination", "type": "conceito"}, {"id": "i:MariaLab", "label": "MariaLab", "type": "iniciativa", "categoria": "Movements and collectives", "cat_slug": "movimentos-coletivos", "natureza_ator": "Feminist hacker organization", "cidade": "São Paulo", "uf": "SP", "escala": "Brazil, Latin America and the Caribbean", "relacao_com_ia": "Relevant", "aderencia": "Core", "justificativa": "Builds feminist infrastructures and care practices, combining direct support, training and technical autonomy.", "sintese": "A feminist hacker organization dedicated to digital security and care, incident response and autonomous free-software infrastructure for collectives and human rights defenders.", "url": "https://marialab.org/"}, {"id": "c:segurança digital", "label": "digital security", "type": "conceito"}, {"id": "c:infraestrutura feminista", "label": "feminist infrastructure", "type": "conceito"}, {"id": "c:autonomia", "label": "autonomy", "type": "conceito"}, {"id": "c:gênero", "label": "gender", "type": "conceito"}, {"id": "c:violência facilitada pela tecnologia", "label": "technology-facilitated violence", "type": "conceito"}, {"id": "i:data_labe", "label": "data_labe", "type": "iniciativa", "categoria": "Movements and collectives", "cat_slug": "movimentos-coletivos", "natureza_ator": "Peripheral data organization", "cidade": "Rio de Janeiro", "uf": "RJ", "escala": "Local and national", "relacao_com_ia": "Central", "aderencia": "Core", "justificativa": "Produces data, methods and narratives from the peripheries to fill official gaps and redistribute decision-making power.", "sintese": "An organization born in Rio's Maré favela complex that democratizes data and technology through research, training and communication, promoting citizen data generation and territorial governance guided by community knowledge.", "url": "https://datalabe.org/sobre/"}, {"id": "c:geração cidadã de dados", "label": "citizen data generation", "type": "conceito"}, {"id": "c:cultura de dados", "label": "data culture", "type": "conceito"}, {"id": "c:território", "label": "territory", "type": "conceito"}, {"id": "i:Código Não Binário", "label": "Código Não Binário", "type": "iniciativa", "categoria": "Movements and collectives", "cat_slug": "movimentos-coletivos", "natureza_ator": "LGBTQIA+ technology organization", "cidade": "Not reported", "uf": "Not reported", "escala": "National and international", "relacao_com_ia": "Central", "aderencia": "Core", "justificativa": "Combines critique of digital colonialism, political education and the development of open technologies led by LGBTQIA+ people.", "sintese": "An LGBTQIA+ organization working for diversity, inclusion and equity in technology and politics, promoting technological autonomy and developing solutions such as an open AI countering anti-LGBTQIA+ hate.", "url": "https://codigonaobinario.org/sobre/"}, {"id": "c:diversidade", "label": "diversity", "type": "conceito"}, {"id": "c:inclusão", "label": "inclusion", "type": "conceito"}, {"id": "c:equidade", "label": "equity", "type": "conceito"}, {"id": "c:soberania digital", "label": "digital sovereignty", "type": "conceito"}, {"id": "c:colonialismo digital", "label": "digital colonialism", "type": "conceito"}, {"id": "i:Núcleo de Tecnologia do MTST", "label": "Núcleo de Tecnologia do MTST", "type": "iniciativa", "categoria": "Movements and collectives", "cat_slug": "movimentos-coletivos", "natureza_ator": "Technical unit of a social movement", "cidade": "São Paulo", "uf": "SP", "escala": "National and territorial", "relacao_com_ia": "Relevant", "aderencia": "Core", "justificativa": "Produces infrastructure and technology out of the housing struggle, linking digital self-determination to concrete territorial needs.", "sintese": "A social-movement technical unit building popular digital sovereignty through community connectivity, critical technology training, and tools for work, political participation and territorial organizing.", "url": "https://www.nucleodetecnologia.com.br/sobrenos"}, {"id": "c:soberania digital popular", "label": "popular digital sovereignty", "type": "conceito"}, {"id": "c:conectividade comunitária", "label": "community connectivity", "type": "conceito"}, {"id": "c:trabalho digno", "label": "decent work", "type": "conceito"}, {"id": "c:poder popular", "label": "popular power", "type": "conceito"}, {"id": "i:Tô no Mapa", "label": "Tô no Mapa", "type": "iniciativa", "categoria": "Movements and collectives", "cat_slug": "movimentos-coletivos", "natureza_ator": "Interorganizational initiative", "cidade": "Cerrado territories", "uf": "Several", "escala": "Territorial and national", "relacao_com_ia": "Indirect", "aderencia": "Core", "justificativa": "Turns communities into producers and stewards of territorial data, countering statistical invisibility and dependence on official databases.", "sintese": "A free, participatory self-mapping app that lets traditional peoples and communities generate territorial data, strengthen their rights and inform public policy.", "url": "https://tonomapa.org.br/"}, {"id": "c:automapeamento", "label": "self-mapping", "type": "conceito"}, {"id": "c:dados territoriais", "label": "territorial data", "type": "conceito"}, {"id": "c:direitos territoriais", "label": "territorial rights", "type": "conceito"}, {"id": "c:participação", "label": "participation", "type": "conceito"}, {"id": "c:conhecimento local", "label": "local knowledge", "type": "conceito"}, {"id": "i:CTRL+Z", "label": "CTRL+Z", "type": "iniciativa", "categoria": "Journalism and monitoring", "cat_slug": "jornalismo-monitoramento", "natureza_ator": "Social accountability organization", "cidade": "Not reported", "uf": "Not reported", "escala": "National", "relacao_com_ia": "Relevant", "aderencia": "Core", "justificativa": "Turns digital harms into investigation, public memory, litigation and mobilization against corporate structures.", "sintese": "An organization confronting the power of large platforms through harm investigation, strategic litigation, public mobilization and the construction of alternatives oriented toward collective wellbeing.", "url": "https://ctrlz.org.br/por-que-existimos/"}, {"id": "c:big techs", "label": "Big Tech", "type": "conceito"}, {"id": "c:responsabilização", "label": "accountability", "type": "conceito"}, {"id": "c:danos digitais", "label": "digital harms", "type": "conceito"}, {"id": "c:assimetria de poder", "label": "power asymmetry", "type": "conceito"}, {"id": "c:soberania", "label": "sovereignty", "type": "conceito"}, {"id": "i:O Panóptico", "label": "O Panóptico", "type": "iniciativa", "categoria": "Journalism and monitoring", "cat_slug": "jornalismo-monitoramento", "natureza_ator": "Research and monitoring project", "cidade": "Rio de Janeiro", "uf": "RJ", "escala": "National", "relacao_com_ia": "Central", "aderencia": "Core", "justificativa": "Produces counter-evidence, data and networks to contest the police use of biometric systems.", "sintese": "A CESeC project that monitors facial recognition in policing, documents contracts, outcomes, violations and biases, and produces critical knowledge from an antiracist perspective.", "url": "https://cesecseguranca.com.br/projeto/o-panoptico-monitor-do-reconhecimento-facial-no-brasil/"}, {"id": "c:reconhecimento facial", "label": "facial recognition", "type": "conceito"}, {"id": "c:policiamento", "label": "policing", "type": "conceito"}, {"id": "c:viés racial", "label": "racial bias", "type": "conceito"}, {"id": "c:transparência", "label": "transparency", "type": "conceito"}, {"id": "i:Revista AzMina", "label": "Revista AzMina", "type": "iniciativa", "categoria": "Journalism and monitoring", "cat_slug": "jornalismo-monitoramento", "natureza_ator": "Feminist journalism organization", "cidade": "São Paulo", "uf": "SP", "escala": "National", "relacao_com_ia": "Relevant", "aderencia": "Core", "justificativa": "Integrates journalism, data and technology to produce evidence, tools and feminist narratives of public interest.", "sintese": "A feminist, intersectional news outlet using information, technology, data and education to confront gender inequality and violence, with methodological transparency and open data.", "url": "https://azmina.com.br/revista-azmina/"}, {"id": "c:jornalismo de dados", "label": "data journalism", "type": "conceito"}, {"id": "c:violência", "label": "violence", "type": "conceito"}, {"id": "i:Open Knowledge Brasil", "label": "Open Knowledge Brasil", "type": "iniciativa", "categoria": "Civic infrastructure and coalitions", "cat_slug": "infraestrutura-civica", "natureza_ator": "Open knowledge organization", "cidade": "Distributed network", "uf": "Several", "escala": "National and international", "relacao_com_ia": "Relevant", "aderencia": "Core", "justificativa": "Builds digital commons and civic capacity through open data, code and knowledge.", "sintese": "The Brazilian chapter of the Open Knowledge Foundation, developing civic technology, data journalism, policy analysis and communities to expand free knowledge, transparency and open source.", "url": "https://ok.org.br/sobre/"}, {"id": "c:conhecimento livre", "label": "free knowledge", "type": "conceito"}, {"id": "c:dados abertos", "label": "open data", "type": "conceito"}, {"id": "c:tecnologia cívica", "label": "civic technology", "type": "conceito"}, {"id": "c:ética de dados", "label": "data ethics", "type": "conceito"}, {"id": "i:Coalizão Direitos na Rede", "label": "Coalizão Direitos na Rede", "type": "iniciativa", "categoria": "Civic infrastructure and coalitions", "cat_slug": "infraestrutura-civica", "natureza_ator": "Civil society coalition", "cidade": "Distributed network", "uf": "Several", "escala": "National", "relacao_com_ia": "Relevant", "aderencia": "Strong", "justificativa": "Creates political coordination and a shared language to contest regulation and governance, without being primarily a space for technical production.", "sintese": "A national coalition linking organizations to defend digital rights, universal access, privacy, freedom, technodiversity and democratic governance in the face of platformization and automated systems.", "url": "https://direitosnarede.org.br/quem-somos/"}, {"id": "c:governança democrática", "label": "democratic governance", "type": "conceito"}, {"id": "c:tecnodiversidade", "label": "technodiversity", "type": "conceito"}, {"id": "c:sistemas automatizados", "label": "automated systems", "type": "conceito"}, {"id": "c:acesso", "label": "access", "type": "conceito"}], "links": [{"source": "i:LAVITS", "target": "c:vigilância"}, {"source": "i:LAVITS", "target": "c:tecnologia"}, {"source": "i:LAVITS", "target": "c:sociedade"}, {"source": "i:LAVITS", "target": "c:dados"}, {"source": "i:LAVITS", "target": "c:poder"}, {"source": "i:MediaLab.UFRJ", "target": "c:tecnopolítica"}, {"source": "i:MediaLab.UFRJ", "target": "c:subjetividade"}, {"source": "i:MediaLab.UFRJ", "target": "c:visibilidade"}, {"source": "i:MediaLab.UFRJ", "target": "c:algoritmos"}, {"source": "i:MediaLab.UFRJ", "target": "c:métodos digitais"}, {"source": "i:NetLab UFRJ", "target": "c:desinformação"}, {"source": "i:NetLab UFRJ", "target": "c:algoritmos"}, {"source": "i:NetLab UFRJ", "target": "c:redes sociais"}, {"source": "i:NetLab UFRJ", "target": "c:governança"}, {"source": "i:NetLab UFRJ", "target": "c:evidência empírica"}, {"source": "i:Pimentalab", "target": "c:tecnopolíticas"}, {"source": "i:Pimentalab", "target": "c:saber-poder"}, {"source": "i:Pimentalab", "target": "c:infraestruturas"}, {"source": "i:Pimentalab", "target": "c:comum"}, {"source": "i:Pimentalab", "target": "c:cosmotécnicas"}, {"source": "i:LabLivre", "target": "c:tecnologias livres"}, {"source": "i:LabLivre", "target": "c:software livre"}, {"source": "i:LabLivre", "target": "c:cultura digital"}, {"source": "i:LabLivre", "target": "c:conhecimento aberto"}, {"source": "i:LabLivre", "target": "c:comunidade"}, {"source": "i:Data Privacy Brasil", "target": "c:proteção de dados"}, {"source": "i:Data Privacy Brasil", "target": "c:governança"}, {"source": "i:Data Privacy Brasil", "target": "c:regulação"}, {"source": "i:Data Privacy Brasil", "target": "c:datificação"}, {"source": "i:Data Privacy Brasil", "target": "c:assimetrias de poder"}, {"source": "i:LAPIN", "target": "c:inteligência artificial"}, {"source": "i:LAPIN", "target": "c:vigilância"}, {"source": "i:LAPIN", "target": "c:desinformação"}, {"source": "i:LAPIN", "target": "c:governança de dados"}, {"source": "i:LAPIN", "target": "c:direitos digitais"}, {"source": "i:Instituto Nupef", "target": "c:conectividade"}, {"source": "i:Instituto Nupef", "target": "c:segurança da informação"}, {"source": "i:Instituto Nupef", "target": "c:proteção territorial"}, {"source": "i:Instituto Nupef", "target": "c:cidadania"}, {"source": "i:Instituto Nupef", "target": "c:infraestruturas resilientes"}, {"source": "i:Instituto da Hora", "target": "c:inteligência artificial"}, {"source": "i:Instituto da Hora", "target": "c:soberania tecnológica"}, {"source": "i:Instituto da Hora", "target": "c:cibersegurança"}, {"source": "i:Instituto da Hora", "target": "c:direitos digitais"}, {"source": "i:Instituto da Hora", "target": "c:dados"}, {"source": "i:Coding Rights", "target": "c:tecnologias e feminismos"}, {"source": "i:Coding Rights", "target": "c:direitos humanos"}, {"source": "i:Coding Rights", "target": "c:cuidado digital"}, {"source": "i:Coding Rights", "target": "c:poder"}, {"source": "i:Coding Rights", "target": "c:imaginação política"}, {"source": "i:MariaLab", "target": "c:segurança digital"}, {"source": "i:MariaLab", "target": "c:infraestrutura feminista"}, {"source": "i:MariaLab", "target": "c:autonomia"}, {"source": "i:MariaLab", "target": "c:gênero"}, {"source": "i:MariaLab", "target": "c:violência facilitada pela tecnologia"}, {"source": "i:data_labe", "target": "c:geração cidadã de dados"}, {"source": "i:data_labe", "target": "c:cultura de dados"}, {"source": "i:data_labe", "target": "c:direitos digitais"}, {"source": "i:data_labe", "target": "c:território"}, {"source": "i:data_labe", "target": "c:inteligência artificial"}, {"source": "i:Código Não Binário", "target": "c:inteligência artificial"}, {"source": "i:Código Não Binário", "target": "c:diversidade"}, {"source": "i:Código Não Binário", "target": "c:inclusão"}, {"source": "i:Código Não Binário", "target": "c:equidade"}, {"source": "i:Código Não Binário", "target": "c:soberania digital"}, {"source": "i:Código Não Binário", "target": "c:colonialismo digital"}, {"source": "i:Núcleo de Tecnologia do MTST", "target": "c:soberania digital popular"}, {"source": "i:Núcleo de Tecnologia do MTST", "target": "c:conectividade comunitária"}, {"source": "i:Núcleo de Tecnologia do MTST", "target": "c:trabalho digno"}, {"source": "i:Núcleo de Tecnologia do MTST", "target": "c:algoritmos"}, {"source": "i:Núcleo de Tecnologia do MTST", "target": "c:poder popular"}, {"source": "i:Tô no Mapa", "target": "c:automapeamento"}, {"source": "i:Tô no Mapa", "target": "c:dados territoriais"}, {"source": "i:Tô no Mapa", "target": "c:direitos territoriais"}, {"source": "i:Tô no Mapa", "target": "c:participação"}, {"source": "i:Tô no Mapa", "target": "c:conhecimento local"}, {"source": "i:CTRL+Z", "target": "c:big techs"}, {"source": "i:CTRL+Z", "target": "c:responsabilização"}, {"source": "i:CTRL+Z", "target": "c:danos digitais"}, {"source": "i:CTRL+Z", "target": "c:assimetria de poder"}, {"source": "i:CTRL+Z", "target": "c:soberania"}, {"source": "i:O Panóptico", "target": "c:reconhecimento facial"}, {"source": "i:O Panóptico", "target": "c:vigilância"}, {"source": "i:O Panóptico", "target": "c:policiamento"}, {"source": "i:O Panóptico", "target": "c:viés racial"}, {"source": "i:O Panóptico", "target": "c:transparência"}, {"source": "i:Revista AzMina", "target": "c:gênero"}, {"source": "i:Revista AzMina", "target": "c:jornalismo de dados"}, {"source": "i:Revista AzMina", "target": "c:inteligência artificial"}, {"source": "i:Revista AzMina", "target": "c:transparência"}, {"source": "i:Revista AzMina", "target": "c:violência"}, {"source": "i:Open Knowledge Brasil", "target": "c:conhecimento livre"}, {"source": "i:Open Knowledge Brasil", "target": "c:dados abertos"}, {"source": "i:Open Knowledge Brasil", "target": "c:tecnologia cívica"}, {"source": "i:Open Knowledge Brasil", "target": "c:transparência"}, {"source": "i:Open Knowledge Brasil", "target": "c:ética de dados"}, {"source": "i:Coalizão Direitos na Rede", "target": "c:direitos digitais"}, {"source": "i:Coalizão Direitos na Rede", "target": "c:governança democrática"}, {"source": "i:Coalizão Direitos na Rede", "target": "c:tecnodiversidade"}, {"source": "i:Coalizão Direitos na Rede", "target": "c:sistemas automatizados"}, {"source": "i:Coalizão Direitos na Rede", "target": "c:acesso"}]};
+
+// ============ SETUP ============
+const svg = d3.select('#graph');
+const wrap = document.getElementById('graph-wrap');
+const g = svg.append('g');
+const linkLayer = g.append('g').attr('class', 'links');
+const nodeLayer = g.append('g').attr('class', 'nodes');
+
+const tooltip = d3.select('#tooltip');
+const detailPanel = document.getElementById('detail');
+const detailContent = document.getElementById('detail-content');
+
+let width = wrap.clientWidth, height = wrap.clientHeight;
+svg.attr('viewBox', [0, 0, width, height]);
+
+// degree count (for sizing concept nodes)
+const degree = {};
+GRAPH_DATA.nodes.forEach(n => degree[n.id] = 0);
+GRAPH_DATA.links.forEach(l => {
+  degree[l.source] = (degree[l.source] || 0) + 1;
+  degree[l.target] = (degree[l.target] || 0) + 1;
+});
+
+function nodeRadius(d) {
+  if (d.type === 'iniciativa') return 9;
+  return Math.min(15, 4 + Math.sqrt(degree[d.id] || 1) * 2.1);
+}
+function nodeColor(d) {
+  if (d.type === 'iniciativa') return CAT_COLORS[d.cat_slug] || '#888';
+  return CONCEPT_COLOR;
+}
+
+// index for quick lookup
+const nodeById = new Map(GRAPH_DATA.nodes.map(n => [n.id, n]));
+const neighbors = new Map();
+GRAPH_DATA.nodes.forEach(n => neighbors.set(n.id, new Set([n.id])));
+GRAPH_DATA.links.forEach(l => {
+  neighbors.get(l.source).add(l.target);
+  neighbors.get(l.target).add(l.source);
+});
+
+// ============ FORCE SIMULATION ============
+const simulation = d3.forceSimulation(GRAPH_DATA.nodes)
+  .force('link', d3.forceLink(GRAPH_DATA.links).id(d => d.id).distance(l => {
+    return 55;
+  }).strength(0.55))
+  .force('charge', d3.forceManyBody().strength(d => d.type === 'iniciativa' ? -220 : -90))
+  .force('center', d3.forceCenter(width / 2, height / 2))
+  .force('collide', d3.forceCollide().radius(d => nodeRadius(d) + 6))
+  .force('x', d3.forceX(width / 2).strength(0.03))
+  .force('y', d3.forceY(height / 2).strength(0.03));
+
+const link = linkLayer.selectAll('line')
+  .data(GRAPH_DATA.links)
+  .join('line')
+  .attr('class', 'link')
+  .attr('stroke-width', 1);
+
+const node = nodeLayer.selectAll('g.node')
+  .data(GRAPH_DATA.nodes)
+  .join('g')
+  .attr('class', d => 'node ' + (d.type === 'conceito' ? 'concept' : 'init'))
+  .call(drag(simulation));
+
+node.append('circle')
+  .attr('r', nodeRadius)
+  .attr('fill', nodeColor);
+
+node.append('text')
+  .attr('x', d => nodeRadius(d) + 4)
+  .attr('y', 3)
+  .text(d => d.label);
+
+node.on('mouseover', (event, d) => {
+    tooltip.style('opacity', 1)
+      .html(`<b>${d.label}</b>${d.type === 'iniciativa' ? '<br>' + (d.categoria || '') : '<br>concept · ' + (degree[d.id] || 0) + ' connections'}`);
+  })
+  .on('mousemove', (event) => {
+    const [mx, my] = d3.pointer(event, wrap);
+    tooltip.style('left', (mx + 16) + 'px').style('top', (my + 10) + 'px');
+  })
+  .on('mouseout', () => tooltip.style('opacity', 0))
+  .on('click', (event, d) => {
+    event.stopPropagation();
+    selectNode(d);
+  });
+
+simulation.on('tick', () => {
+  link
+    .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+    .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+  node.attr('transform', d => `translate(${d.x},${d.y})`);
+});
+
+function drag(sim) {
+  function started(event, d) {
+    if (!event.active) sim.alphaTarget(0.15).restart();
+    d.fx = d.x; d.fy = d.y;
+  }
+  function dragged(event, d) { d.fx = event.x; d.fy = event.y; }
+  function ended(event, d) {
+    if (!event.active) sim.alphaTarget(0);
+    d.fx = null; d.fy = null;
+  }
+  return d3.drag().on('start', started).on('drag', dragged).on('end', ended);
+}
+
+// ============ ZOOM ============
+const zoom = d3.zoom().scaleExtent([0.15, 6]).on('zoom', (event) => {
+  g.attr('transform', event.transform);
+});
+svg.call(zoom).on('dblclick.zoom', null);
+
+document.getElementById('zoom-in').onclick = () => svg.transition().duration(200).call(zoom.scaleBy, 1.4);
+document.getElementById('zoom-out').onclick = () => svg.transition().duration(200).call(zoom.scaleBy, 1/1.4);
+
+svg.on('click', () => clearSelection());
+
+// ============ SELECTION / HIGHLIGHT ============
+let activeCategories = new Set(Object.keys(CAT_COLORS));
+let selectedId = null;
+
+function selectNode(d) {
+  selectedId = d.id;
+  const ns = neighbors.get(d.id);
+  node.classed('dim', n => !ns.has(n.id));
+  node.classed('lit', n => n.id === d.id);
+  link.classed('dim', l => !(ns.has(l.source.id) && ns.has(l.target.id)))
+      .classed('lit', l => l.source.id === d.id || l.target.id === d.id);
+  showDetail(d);
+}
+
+function clearSelection() {
+  selectedId = null;
+  node.classed('dim', false).classed('lit', false);
+  link.classed('dim', false).classed('lit', false);
+  detailPanel.classList.remove('open');
+  applyFilter();
+}
+
+document.getElementById('detail-close').onclick = clearSelection;
+document.getElementById('reset-btn').onclick = () => {
+  clearSelection();
+  svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+};
+
+function showDetail(d) {
+  let html = '';
+  if (d.type === 'iniciativa') {
+    const color = CAT_COLORS[d.cat_slug] || '#888';
+    html += `<span class="tag" style="background:${color}">${d.categoria || ''}</span>`;
+    html += `<h2>${d.label}</h2>`;
+    html += `<div class="meta">${d.natureza_ator || ''} · ${d.cidade || ''}${d.uf && d.uf !== 'Não informado' ? ', ' + d.uf : ''}<br>Scope: ${d.escala || ''}<br>Relation to AI: ${d.relacao_com_ia || ''} · Alignment: ${d.aderencia || ''}</div>`;
+    if (d.sintese) html += `<div class="block"><h4>Summary</h4><p>${d.sintese}</p></div>`;
+    if (d.justificativa) html += `<div class="block"><h4>Alignment with the counter-lab category</h4><p>${d.justificativa}</p></div>`;
+    const concepts = GRAPH_DATA.links.filter(l => l.source.id === d.id).map(l => nodeById.get(l.target.id));
+    if (concepts.length) {
+      html += `<div class="block"><h4>Concepts (${concepts.length})</h4><div class="related">`;
+      concepts.forEach(c => html += `<span class="chip" data-id="${c.id}">${c.label}</span>`);
+      html += `</div></div>`;
+    }
+    if (d.url) html += `<div class="block"><h4>Source</h4><p><a href="${d.url}" target="_blank" rel="noopener">${d.url}</a></p></div>`;
+  } else {
+    html += `<span class="tag" style="background:${CONCEPT_COLOR}">Concept</span>`;
+    html += `<h2>${d.label}</h2>`;
+    const inits = GRAPH_DATA.links.filter(l => l.target.id === d.id).map(l => nodeById.get(l.source.id));
+    html += `<div class="meta">Referenced by ${inits.length} initiative${inits.length === 1 ? '' : 's'}</div>`;
+    html += `<div class="block"><h4>Related initiatives</h4><div class="related">`;
+    inits.forEach(i => html += `<span class="chip" data-id="${i.id}" style="border-color:${CAT_COLORS[i.cat_slug]}66">${i.label}</span>`);
+    html += `</div></div>`;
+  }
+  detailContent.innerHTML = html;
+  detailPanel.classList.add('open');
+  detailContent.querySelectorAll('.chip').forEach(chip => {
+    chip.onclick = (e) => {
+      e.stopPropagation();
+      const target = nodeById.get(chip.dataset.id);
+      if (target) selectNode(target);
+    };
+  });
+}
+
+// ============ LEGEND / FILTERS ============
+const legendEl = document.getElementById('legend');
+const catCounts = {};
+GRAPH_DATA.nodes.forEach(n => {
+  if (n.type === 'iniciativa') catCounts[n.cat_slug] = (catCounts[n.cat_slug] || 0) + 1;
+});
+Object.keys(CAT_COLORS).forEach(slug => {
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  item.dataset.slug = slug;
+  item.innerHTML = `<span class="swatch" style="background:${CAT_COLORS[slug]}"></span>${CAT_LABELS[slug]}<span class="legend-count">${catCounts[slug] || 0}</span>`;
+  item.onclick = () => {
+    if (activeCategories.has(slug)) { activeCategories.delete(slug); item.classList.add('off'); }
+    else { activeCategories.add(slug); item.classList.remove('off'); }
+    applyFilter();
+  };
+  legendEl.appendChild(item);
+});
+const conceptItem = document.createElement('div');
+conceptItem.className = 'legend-item';
+conceptItem.innerHTML = `<span class="swatch" style="background:${CONCEPT_COLOR}"></span>Concepts<span class="legend-count">${GRAPH_DATA.nodes.filter(n=>n.type==='conceito').length}</span>`;
+legendEl.appendChild(conceptItem);
+
+function applyFilter() {
+  const visibleInitIds = new Set(
+    GRAPH_DATA.nodes.filter(n => n.type === 'iniciativa' && activeCategories.has(n.cat_slug)).map(n => n.id)
+  );
+  // a concept is visible if it connects to at least one visible initiative
+  const visibleConceptIds = new Set();
+  GRAPH_DATA.links.forEach(l => {
+    if (visibleInitIds.has(l.source.id)) visibleConceptIds.add(l.target.id);
+  });
+  node.style('display', d => {
+    if (d.type === 'iniciativa') return visibleInitIds.has(d.id) ? null : 'none';
+    return visibleConceptIds.has(d.id) ? null : 'none';
+  });
+  link.style('display', l => (visibleInitIds.has(l.source.id) && visibleConceptIds.has(l.target.id)) ? null : 'none');
+}
+
+// ============ SEARCH ============
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) { clearSelection(); return; }
+  const matchIds = new Set(GRAPH_DATA.nodes.filter(n => n.label.toLowerCase().includes(q)).map(n => n.id));
+  node.classed('dim', n => !matchIds.has(n.id));
+  node.classed('lit', n => matchIds.has(n.id));
+  link.classed('dim', l => !(matchIds.has(l.source.id) || matchIds.has(l.target.id)));
+});
+
+// ============ STATS ============
+document.getElementById('stats').innerHTML =
+  `<b>${GRAPH_DATA.nodes.filter(n=>n.type==='iniciativa').length}</b> initiatives &nbsp;·&nbsp; <b>${GRAPH_DATA.nodes.filter(n=>n.type==='conceito').length}</b> concepts<br>
+   <b>${GRAPH_DATA.links.length}</b> connections<br><br>
+   Drag nodes, scroll to zoom, click for details.`;
+
+// ============ RESIZE ============
+window.addEventListener('resize', () => {
+  width = wrap.clientWidth; height = wrap.clientHeight;
+  svg.attr('viewBox', [0, 0, width, height]);
+  simulation.force('center', d3.forceCenter(width / 2, height / 2));
+  simulation.alpha(0.3).restart();
+});
+</script>
+</body>
+</html>
