@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Counter-Laboratories for the AI Commons</title>
 <meta name="description" content="Counter-Laboratories of AI — a technopolitical framework connecting ethical AI with data, labour, infrastructure, knowledge and democratic control.">
-<meta name="theme-color" content="#171913">
+<meta name="theme-color" content="#efede6">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1052,6 +1052,103 @@ footer a{
 
 mark{ background:rgba(211,160,58,0.22); color:var(--paper); padding:0 2px; border-radius:2px; }
 </style>
+
+<style id="editorial-redesign">
+:root{
+  --bg:#efede6;
+  --bg-2:#e6e2d8;
+  --panel:#f7f5ef;
+  --line:#b8b3a7;
+  --paper:#20221e;
+  --dim:#5e625a;
+  --dim-2:#767970;
+  --gold:#a33d2f;
+  --sage:#275f55;
+  --rust:#a33d2f;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:Arial,Helvetica,sans-serif;
+}
+body{background:var(--bg);color:var(--paper);font-family:var(--sans);font-size:17px;line-height:1.72;}
+a{color:var(--rust);text-decoration-thickness:1px;text-underline-offset:3px;}
+#topbar{padding:12px 30px;background:rgba(239,237,230,.96);border-bottom:1px solid #292b27;backdrop-filter:none;}
+#topbar .brand{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+#topbar .brand span{color:var(--rust);}
+#toc-toggle{background:transparent;border:1px solid #292b27;color:var(--paper);border-radius:0;text-transform:uppercase;letter-spacing:.08em;}
+#hero{max-width:1180px;padding:92px 30px 72px;border-bottom:1px solid #292b27;}
+#hero .eyebrow{color:var(--sage);font-size:12px;letter-spacing:.12em;margin-bottom:30px;}
+#hero h1{max-width:980px;font-size:clamp(46px,7vw,78px);font-weight:400;line-height:.99;letter-spacing:-.035em;margin-bottom:28px;}
+#hero .subtitle{max-width:760px;color:var(--paper);font-size:clamp(21px,2.5vw,29px);font-weight:400;line-height:1.35;margin-bottom:28px;}
+#hero .lede{max-width:700px;color:var(--dim);font-size:17px;}
+#hero .byline{max-width:700px;border-top:1px solid var(--line);color:var(--dim);}
+#hero .byline a{color:var(--dim);}
+#layout{grid-template-columns:220px minmax(0,800px);gap:86px;max-width:1180px;padding:0 30px 120px;justify-content:start;}
+#toc{top:68px;padding-top:66px;}
+#toc p.eyebrow{color:var(--rust);letter-spacing:.12em;border-bottom:1px solid var(--line);padding-bottom:11px;}
+#toc ol{gap:0;}
+#toc li a{padding:9px 0;border-radius:0;border-left:0;border-bottom:1px solid rgba(184,179,167,.55);color:var(--dim);font-family:var(--serif);font-size:13px;line-height:1.35;}
+#toc li a:hover,#toc li a.active{color:var(--rust);background:transparent;border-left:0;}
+main{max-width:800px;}
+.section{position:relative;padding:76px 0 82px;border-top:1px solid #292b27;}
+.section.intro{padding-top:66px;}
+.section-number{position:absolute;left:-68px;top:81px;width:42px;margin:0;padding-top:4px;border-top:2px solid var(--rust);color:var(--rust);font-family:var(--sans);font-size:11px;letter-spacing:.1em;}
+.kicker{max-width:670px;color:var(--sage);font-size:11px;line-height:1.5;letter-spacing:.12em;margin:0 0 30px;}
+h2{max-width:720px;font-size:clamp(33px,4vw,47px);font-weight:400;line-height:1.08;letter-spacing:-.025em;margin-bottom:16px;}
+.section.intro h2{font-size:clamp(38px,5vw,55px);}
+h3{font-family:var(--sans);font-size:17px;line-height:1.35;font-weight:700;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--line);}
+h3.subhead{font-family:var(--serif);font-size:28px;font-weight:400;border-top:1px solid #292b27;}
+h4.table-group-label{color:var(--rust);font-family:var(--sans);font-size:13px;text-transform:uppercase;letter-spacing:.08em;}
+.section p,.section li{color:#343731;}
+.section > p:not(.section-number):not(.kicker),.section > ul.prose-list{max-width:720px;}
+.section > p:not(.section-number):not(.kicker){font-family:var(--serif);font-size:18px;line-height:1.76;margin-bottom:20px;}
+.prose-list{padding-left:24px;font-family:var(--serif);font-size:17px;}
+.callout{display:grid;grid-template-columns:36px 1fr;gap:16px;background:transparent;border:0;border-top:2px solid var(--rust);border-bottom:1px solid var(--line);border-radius:0;padding:20px 0 22px;margin:36px 0 42px;}
+.callout-icon{color:var(--rust);font-size:24px;}
+.callout-label{color:var(--rust);letter-spacing:.1em;}
+.callout-text{color:var(--paper);font-family:var(--serif);font-size:17px;}
+.card-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid #292b27;border-bottom:1px solid #292b27;margin:32px 0 42px;}
+.op-card{background:transparent;border:0;border-right:1px solid var(--line);border-radius:0;padding:22px 20px 24px 0;margin-right:20px;}
+.op-card:nth-child(3n){border-right:0;margin-right:0;}
+.op-card h4{color:var(--sage);font-size:12px;letter-spacing:.08em;}
+.op-card p{color:var(--dim);font-family:var(--serif);font-size:15px;line-height:1.55;}
+.table-wrap{border:1px solid #292b27;border-radius:0;background:rgba(255,255,255,.22);margin:30px 0 40px;}
+table.data-table{font-size:14px;}
+table.data-table th{background:#292b27;color:#f3f0e7;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:13px 14px;}
+table.data-table td{color:#30332e;border-bottom-color:var(--line);padding:13px 14px;}
+table.data-table tr:hover td{background:#e8e3d8;}
+ul.link-grid{grid-template-columns:1fr;gap:0;border-top:1px solid #292b27;}
+ul.link-grid li a{position:relative;background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:13px 34px 13px 0;color:var(--paper);font-family:var(--serif);}
+ul.link-grid li a::after{content:'↗';position:absolute;right:2px;color:var(--rust);}
+.map-embed{margin:42px 0;padding-top:12px;border-top:2px solid var(--sage);}
+.map-embed iframe{border-radius:0;border-color:#292b27;}
+.map-embed figcaption{color:var(--dim);font-family:var(--serif);}
+.section.refs p{color:var(--dim);font-family:var(--sans);font-size:13px;line-height:1.6;padding-left:22px;text-indent:-22px;}
+mark{background:#d9d19f;color:var(--paper);padding:1px 3px;border-radius:0;}
+footer{max-width:1180px;padding:36px 30px 70px;border-top:1px solid #292b27;}
+#back-to-top{background:transparent;color:var(--paper);border:0;border-bottom:1px solid var(--paper);border-radius:0;padding:4px 0;}
+@media (max-width:1100px){
+  #layout{grid-template-columns:190px minmax(0,740px);gap:54px;}
+  .section-number{position:static;width:40px;margin-bottom:12px;}
+}
+@media (max-width:980px){
+  #layout{display:block;padding:0 24px 90px;}
+  main{margin:0 auto;}
+  #toc-col.open{background:var(--bg);}
+  #toc li a{font-size:16px;padding:13px 0;}
+  #hero{padding-left:24px;padding-right:24px;}
+}
+@media (max-width:700px){
+  body{font-size:16px;}
+  #hero{padding-top:62px;padding-bottom:48px;}
+  #hero h1{font-size:clamp(40px,12vw,58px);}
+  .section{padding:58px 0 62px;}
+  .section > p:not(.section-number):not(.kicker){font-size:17px;line-height:1.7;}
+  .card-grid{grid-template-columns:1fr;}
+  .op-card,.op-card:nth-child(3n){border-right:0;border-bottom:1px solid var(--line);margin:0;padding:20px 0;}
+  .op-card:last-child{border-bottom:0;}
+  h2{font-size:36px;}
+  h3{margin-top:38px;}
+}
+</style>
 </head>
 
 <body id="top">
@@ -1177,20 +1274,26 @@ mark{ background:rgba(211,160,58,0.22); color:var(--paper); padding:0 2px; borde
         </li>
 
         <li>
-          <a href="#what-the-ai-resist-list-contributesand-what-it-does-not">
-            8. What the AI Resist List contributes—and what it does not
+          <a href="#resisting-ai">
+            8. Resisting AI
+          </a>
+        </li>
+
+        <li>
+          <a href="#next-steps-mapping-controversies-and-pedagogies-of-the-ai-commons">
+            9. Next steps: mapping controversies and pedagogies of the AI commons
           </a>
         </li>
 
         <li>
           <a href="#from-a-catalogue-of-initiatives-to-a-multilayer-network">
-            9. From a catalogue of initiatives to a multilayer network
+            10. From a catalogue of initiatives to a multilayer network
           </a>
         </li>
 
         <li>
           <a href="#ethical-ai-emerges-from-alternative-modes-of-production">
-            10. AI commons emerges from alternative modes of production
+            11. AI commons emerges from alternative modes of production
           </a>
         </li>
 
@@ -1325,35 +1428,35 @@ mark{ background:rgba(211,160,58,0.22); color:var(--paper); padding:0 2px; borde
 <p>The unit of analysis should therefore be explicit. Open Knowledge Brasil is an organization that hosts multiple projects; Querido Diário is one of its civic infrastructures. PretaLab is an Olabi initiative; Conecta PretaLab is a recurring programme and discursive space. TybyrIA is a model and dataset produced within the Código Não Binário network. The AI Resist List is a curated directory, not an organization equivalent to the groups it documents.</p>
 <div class="table-wrap"><table class="data-table">
 <thead><tr>
-<th>Tipo institucional</th>
-<th>Quantidade</th>
-<th>Função predominante no campo</th>
+<th>Institutional type</th>
+<th>Number</th>
+<th>Predominant function in the field</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Laboratórios e redes acadêmicas</td>
+<td>Academic laboratories and networks</td>
 <td>9</td>
-<td>Produção conceitual, métodos digitais, pesquisa e formação</td>
+<td>Conceptual production, digital methods, research and education</td>
 </tr>
 <tr>
-<td>Centros independentes e organizações de direitos</td>
+<td>Independent research centres and rights organisations</td>
 <td>11</td>
-<td>Pesquisa aplicada, incidência, litigância e defesa de direitos</td>
+<td>Applied research, advocacy, litigation and defence of rights</td>
 </tr>
 <tr>
-<td>Movimentos e coletivos sociais</td>
+<td>Social movements and collectives</td>
 <td>11</td>
-<td>Tecnologias situadas, cuidado, formação e infraestruturas comunitárias</td>
+<td>Situated technologies, care, education and community infrastructures</td>
 </tr>
 <tr>
-<td>Jornalismo e monitoramento</td>
+<td>Journalism and monitoring</td>
 <td>8</td>
-<td>Investigação, visibilidade, contraexpertise e responsabilização</td>
+<td>Investigation, visibility, counter-expertise and accountability</td>
 </tr>
 <tr>
-<td>Infraestruturas cívicas e coalizões</td>
+<td>Civic infrastructures and coalitions</td>
 <td>5</td>
-<td>Dados abertos, ferramentas públicas e articulação de redes</td>
+<td>Open data, public tools and network coordination</td>
 </tr>
 <tr>
 <td><strong>Total</strong></td>
@@ -1370,370 +1473,370 @@ mark{ background:rgba(211,160,58,0.22); color:var(--paper); padding:0 2px; borde
 <p class="kicker">A DENSE ECOLOGY OF DATA, MOVEMENTS AND PUBLIC PROBLEMS</p>
 <p>Brazil is a field in which acute racial, gendered, territorial and labour inequalities coexist with traditions of free software, open government data, community communication, social-movement organizing and digital-rights advocacy. This combination makes visible both the violence of platform infrastructures and the capacity to invent alternatives from situated problems.</p>
 <p>The cases below can all be called AI counter-laboratories. Their relevance is precisely that they redistribute different components of AI production: data, technical skills, public narratives, territorial representation, legal power, worker coordination and institutional alliances. To this moment, we gathered 44 initiatives that we are classifying under this nomination, but with different institutional status.</p>
-<h4 class="table-group-label">1. Laboratórios e redes acadêmicas</h4>
+<h4 class="table-group-label">1. Academic laboratories and networks</h4>
 <div class="table-wrap"><table class="data-table">
 <thead><tr>
-<th>Nº</th>
-<th>Iniciativa</th>
-<th>Base ou escala</th>
-<th>Atuação principal</th>
-<th>Aderência</th>
+<th>No.</th>
+<th>Initiative</th>
+<th>Base or scale</th>
+<th>Primary area of activity</th>
+<th>Alignment</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>1</td>
 <td><a href="https://lavits.org/a-lavits-pt/">LAVITS</a></td>
-<td>Rede latino-americana, com forte presença brasileira</td>
-<td>Vigilância, tecnopolítica, colonialidade digital e articulação entre academia, ativismo e arte</td>
+<td>Latin American network with a strong Brazilian presence</td>
+<td>Surveillance, technopolitics, digital coloniality, and connections between academia, activism and art</td>
 <td>N</td>
 </tr>
 <tr>
 <td>2</td>
 <td><a href="https://medialabufrj.net/">MediaLab.UFRJ</a></td>
 <td>UFRJ, Rio de Janeiro</td>
-<td>Vigilância, subjetividade, economia da atenção, algoritmos e tecnopolítica</td>
+<td>Surveillance, subjectivity, the attention economy, algorithms and technopolitics</td>
 <td>N</td>
 </tr>
 <tr>
 <td>3</td>
 <td><a href="https://netlab.eco.ufrj.br/sobre">NetLab UFRJ</a></td>
 <td>ECO/UFRJ, Rio de Janeiro</td>
-<td>Desinformação, plataformas, operações de influência, IA e integridade da informação</td>
+<td>Disinformation, platforms, influence operations, AI and information integrity</td>
 <td>F</td>
 </tr>
 <tr>
 <td>4</td>
 <td><a href="https://www.pimentalab.net/about-us/">Pimentalab</a></td>
 <td>Unifesp, Guarulhos</td>
-<td>Tecnologia, política, conhecimento, extrativismo, tecnopolíticas e lutas sociais</td>
+<td>Technology, politics, knowledge, extractivism, technopolitics and social struggles</td>
 <td>N</td>
 </tr>
 <tr>
 <td>5</td>
 <td><a href="https://lablivre.pesquisa.ufabc.edu.br/">LabLivre</a></td>
 <td>UFABC, São Bernardo do Campo</td>
-<td>Tecnologias livres, soberania digital, colonialismo de dados e experimentos tecnopolíticos</td>
+<td>Free technologies, digital sovereignty, data colonialism and technopolitical experiments</td>
 <td>N</td>
 </tr>
 <tr>
 <td>6</td>
 <td><a href="https://www.labic.net/labic/">LABIC-UFES</a></td>
 <td>UFES, Vitória</td>
-<td>Ciência de dados, cultura digital, desinformação e experimentação com produtos digitais</td>
+<td>Data science, digital culture, disinformation and experimentation with digital products</td>
 <td>A</td>
 </tr>
 <tr>
 <td>7</td>
 <td><a href="https://digilab.unifesp.br/">DigiLab-Unifesp</a></td>
 <td>Unifesp</td>
-<td>Sociologia digital e impactos sociais, políticos e sanitários das tecnologias</td>
+<td>Digital sociology and the social, political and health impacts of technologies</td>
 <td>F</td>
 </tr>
 <tr>
 <td>8</td>
 <td><a href="https://inctdd.org/institucional/">INCT Democracia Digital</a></td>
-<td>Rede nacional coordenada a partir da UFBA</td>
-<td>Democracia digital, governo digital, privacidade, opacidade algorítmica e economia da atenção</td>
+<td>National network coordinated by UFBA</td>
+<td>Digital democracy, digital government, privacy, algorithmic opacity and the attention economy</td>
 <td>F</td>
 </tr>
 <tr>
 <td>9</td>
 <td><a href="https://direitorio.fgv.br/pesquisa/centro-de-tecnologia-e-sociedade">CTS-FGV Direito Rio</a></td>
 <td>FGV, Rio de Janeiro</td>
-<td>Regulação de plataformas, governança da IA, proteção de dados e interesse público</td>
+<td>Platform regulation, AI governance, data protection and the public interest</td>
 <td>A</td>
 </tr>
 </tbody>
 </table></div>
-<h4 class="table-group-label">2. Centros independentes de pesquisa, direitos digitais e incidência</h4>
+<h4 class="table-group-label">2. Independent research centres, digital rights and advocacy</h4>
 <div class="table-wrap"><table class="data-table">
 <thead><tr>
-<th>Nº</th>
-<th>Iniciativa</th>
-<th>Base ou escala</th>
-<th>Atuação principal</th>
-<th>Aderência</th>
+<th>No.</th>
+<th>Initiative</th>
+<th>Base or scale</th>
+<th>Primary area of activity</th>
+<th>Alignment</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>10</td>
 <td><a href="https://internetlab.org.br/">InternetLab</a></td>
-<td>São Paulo/nacional</td>
-<td>Pesquisa em direito e tecnologia, moderação, regulação de plataformas e direitos digitais</td>
+<td>São Paulo/national</td>
+<td>Research on law and technology, content moderation, platform regulation and digital rights</td>
 <td>F</td>
 </tr>
 <tr>
 <td>11</td>
 <td><a href="https://www.dataprivacybr.org/">Data Privacy Brasil</a></td>
-<td>São Paulo/nacional</td>
-<td>Proteção de dados, justiça digital, governança de dados e regulação de IA</td>
+<td>São Paulo/national</td>
+<td>Data protection, digital justice, data governance and AI regulation</td>
 <td>F</td>
 </tr>
 <tr>
 <td>12</td>
 <td><a href="https://lapin.org.br/sobre-nos/">LAPIN</a></td>
-<td>Brasília/nacional</td>
-<td>Pesquisa e ação em políticas digitais, IA, justiça socioambiental e data centers</td>
+<td>Brasília/national</td>
+<td>Research and action on digital policy, AI, socio-environmental justice and data centres</td>
 <td>N</td>
 </tr>
 <tr>
 <td>13</td>
 <td><a href="https://irisbh.com.br/sobre-o-iris/">IRIS</a></td>
-<td>Belo Horizonte/nacional</td>
-<td>Internet e sociedade, criptografia, IA, plataformas e direitos humanos</td>
+<td>Belo Horizonte/national</td>
+<td>Internet and society, encryption, AI, platforms and human rights</td>
 <td>F</td>
 </tr>
 <tr>
 <td>14</td>
 <td><a href="https://itsrio.org/">ITS Rio</a></td>
 <td>Rio de Janeiro</td>
-<td>Direito digital, inovação, regulação de IA e consultas públicas</td>
+<td>Digital law, innovation, AI regulation and public consultations</td>
 <td>A</td>
 </tr>
 <tr>
 <td>15</td>
 <td><a href="https://nupef.org.br/quem-somos-2/">Instituto Nupef</a></td>
-<td>Nacional, com atuação territorial</td>
-<td>Redes comunitárias, nuvem soberana, infraestruturas autônomas e segurança digital</td>
+<td>National, with territorial engagement</td>
+<td>Community networks, sovereign cloud, autonomous infrastructures and digital security</td>
 <td>N</td>
 </tr>
 <tr>
 <td>16</td>
 <td><a href="https://www.institutodahora.com/">Instituto da Hora</a></td>
-<td>Nacional</td>
-<td>Direitos digitais, produção científica antirracista, cibersegurança e racismo algorítmico</td>
+<td>National</td>
+<td>Digital rights, anti-racist knowledge production, cybersecurity and algorithmic racism</td>
 <td>N</td>
 </tr>
 <tr>
 <td>17</td>
 <td><a href="https://aqualtunelab.com.br/">AqualtuneLab</a></td>
-<td>Rio de Janeiro/nacional</td>
-<td>Direito, tecnologia e raça; racismo algorítmico e reconhecimento facial</td>
+<td>Rio de Janeiro/national</td>
+<td>Law, technology and race; algorithmic racism and facial recognition</td>
 <td>N</td>
 </tr>
 <tr>
 <td>18</td>
 <td><a href="https://alafialab.org/">Aláfia Lab</a></td>
-<td>Salvador/nacional</td>
-<td>Política digital, desigualdades informativas, racismo digital, eleições e IA</td>
+<td>Salvador/national</td>
+<td>Digital policy, information inequalities, digital racism, elections and AI</td>
 <td>N</td>
 </tr>
 <tr>
 <td>19</td>
-<td><a href="https://artigo19.org/">ARTIGO 19 Brasil e América do Sul</a></td>
-<td>Brasil e América do Sul</td>
-<td>Liberdade de expressão, tecnologias abertas, regulação e responsabilização de plataformas</td>
+<td><a href="https://artigo19.org/">ARTICLE 19 Brazil and South America</a></td>
+<td>Brazil and South America</td>
+<td>Freedom of expression, open technologies, regulation and platform accountability</td>
 <td>F</td>
 </tr>
 <tr>
 <td>20</td>
 <td><a href="https://intervozes.org.br/">Intervozes</a></td>
-<td>Rede nacional</td>
-<td>Direito à comunicação, soberania informacional, regulação das big techs e mídias comunitárias</td>
+<td>National network</td>
+<td>The right to communication, information sovereignty, Big Tech regulation and community media</td>
 <td>N</td>
 </tr>
 </tbody>
 </table></div>
-<h4 class="table-group-label">3. Movimentos, coletivos feministas, antirracistas e comunitários</h4>
+<h4 class="table-group-label">3. Social movements and feminist, anti-racist and community collectives</h4>
 <div class="table-wrap"><table class="data-table">
 <thead><tr>
-<th>Nº</th>
-<th>Iniciativa</th>
-<th>Base ou escala</th>
-<th>Atuação principal</th>
-<th>Aderência</th>
+<th>No.</th>
+<th>Initiative</th>
+<th>Base or scale</th>
+<th>Primary area of activity</th>
+<th>Alignment</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>21</td>
 <td><a href="https://codingrights.org/sobre-o-coding-rights/">Coding Rights</a></td>
-<td>Brasil, atuação transnacional</td>
-<td>Tecnologia transfeminista, decolonial, antirracista e experimentação especulativa</td>
+<td>Brazil, transnational reach</td>
+<td>Transfeminist, decolonial and anti-racist technology, and speculative experimentation</td>
 <td>N</td>
 </tr>
 <tr>
 <td>22</td>
 <td><a href="https://marialab.org/">MariaLab</a></td>
-<td>São Paulo/nacional</td>
-<td>Infraestruturas feministas, hacking, cuidado digital e resposta a incidentes</td>
+<td>São Paulo/national</td>
+<td>Feminist infrastructures, hacking, digital care and incident response</td>
 <td>N</td>
 </tr>
 <tr>
 <td>23</td>
-<td><a href="https://pratododia.org/pt/">Rede Transfeminista de Cuidados Digitais</a></td>
-<td>Rede distribuída</td>
-<td>Cuidados digitais, segurança feminista, autonomia e defesa de ativistas</td>
+<td><a href="https://pratododia.org/pt/">Transfeminist Digital Care Network</a></td>
+<td>Distributed network</td>
+<td>Digital care, feminist security, autonomy and the protection of activists</td>
 <td>N</td>
 </tr>
 <tr>
 <td>24</td>
 <td><a href="https://olabi.org.br/">Olabi</a></td>
-<td>Rio de Janeiro/nacional</td>
-<td>Diversidade tecnológica, inovação social, formação e tecnologia orientada pelo território</td>
+<td>Rio de Janeiro/national</td>
+<td>Technological diversity, social innovation, education and territorially grounded technology</td>
 <td>F</td>
 </tr>
 <tr>
 <td>25</td>
 <td><a href="https://olabi.org.br/projeto/pretalab/">PretaLab</a></td>
-<td>Nacional</td>
-<td>Formação, pesquisa e articulação de mulheres negras e indígenas na tecnologia</td>
+<td>National</td>
+<td>Education, research and networking for Black and Indigenous women in technology</td>
 <td>N</td>
 </tr>
 <tr>
 <td>26</td>
 <td><a href="https://minasprogramam.com/quem-somos/">Minas Programam</a></td>
-<td>São Paulo/nacional</td>
-<td>Formação tecnológica e direitos digitais para mulheres negras, indígenas e periféricas</td>
+<td>São Paulo/national</td>
+<td>Technology education and digital rights for Black, Indigenous and peripheralised women</td>
 <td>N</td>
 </tr>
 <tr>
 <td>27</td>
 <td><a href="https://datalabe.org/sobre/">data_labe</a></td>
 <td>Complexo da Maré, Rio de Janeiro</td>
-<td>Dados produzidos nas periferias, jornalismo, formação comunitária e direitos digitais</td>
+<td>Community-produced data from urban peripheries, journalism, community education and digital rights</td>
 <td>N</td>
 </tr>
 <tr>
 <td>28</td>
 <td><a href="https://codigonaobinario.org/">Código Não Binário</a></td>
-<td>São Paulo/nacional</td>
-<td>Tecnologias LGBTQIA+, IA aberta, soberania digital e litigância estratégica</td>
+<td>São Paulo/national</td>
+<td>LGBTQIA+ technologies, open AI, digital sovereignty and strategic litigation</td>
 <td>N</td>
 </tr>
 <tr>
 <td>29</td>
-<td><a href="https://www.nucleodetecnologia.com.br/sobrenos">Núcleo de Tecnologia do MTST</a></td>
-<td>Movimento social/nacional</td>
-<td>Soberania digital popular, formação e plataformas autogeridas de trabalho</td>
+<td><a href="https://www.nucleodetecnologia.com.br/sobrenos">MTST Technology Unit</a></td>
+<td>Social movement/national</td>
+<td>Popular digital sovereignty, education and self-managed labour platforms</td>
 <td>N</td>
 </tr>
 <tr>
 <td>30</td>
 <td><a href="https://tonomapa.org.br/">Tô no Mapa</a></td>
-<td>Comunidades tradicionais/nacional</td>
-<td>Automapeamento territorial e governança comunitária dos dados</td>
+<td>Traditional communities/national</td>
+<td>Territorial self-mapping and community data governance</td>
 <td>N</td>
 </tr>
 <tr>
 <td>31</td>
 <td><a href="https://lab.procomum.org/quem-somos/">LAB Procomum</a></td>
-<td>Santos e Baixada Santista</td>
-<td>Laboratório cidadão, bens comuns, prototipagem e infraestruturas colaborativas</td>
+<td>Santos and the Baixada Santista region</td>
+<td>Citizen laboratory, commons, prototyping and collaborative infrastructures</td>
 <td>N</td>
 </tr>
 </tbody>
 </table></div>
-<h4 class="table-group-label">4. Jornalismo, monitoramento e produção de contrapúblicos</h4>
+<h4 class="table-group-label">4. Journalism, monitoring and the production of counterpublics</h4>
 <div class="table-wrap"><table class="data-table">
 <thead><tr>
-<th>Nº</th>
-<th>Iniciativa</th>
-<th>Base ou escala</th>
-<th>Atuação principal</th>
-<th>Aderência</th>
+<th>No.</th>
+<th>Initiative</th>
+<th>Base or scale</th>
+<th>Primary area of activity</th>
+<th>Alignment</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>32</td>
 <td><a href="https://ctrlz.org.br/por-que-existimos/">CTRL+Z</a></td>
-<td>Organização brasileira/nacional</td>
-<td>Jornalismo investigativo, mobilização e litigância para responsabilizar big techs</td>
+<td>Brazilian organisation/national</td>
+<td>Investigative journalism, mobilisation and litigation to hold Big Tech accountable</td>
 <td>N</td>
 </tr>
 <tr>
 <td>33</td>
 <td><a href="https://www.opanoptico.com.br/">O Panóptico</a></td>
-<td>Projeto do CESeC, Rio de Janeiro</td>
-<td>Monitoramento do reconhecimento facial e da vigilância na segurança pública</td>
+<td>CESeC project, Rio de Janeiro</td>
+<td>Monitoring facial recognition and surveillance in public security</td>
 <td>N</td>
 </tr>
 <tr>
 <td>34</td>
 <td><a href="https://nucleo.jor.br/sobre/">Núcleo Jornalismo</a></td>
-<td>Nacional/digital</td>
-<td>Jornalismo sobre plataformas, IA, poder corporativo e direitos digitais</td>
+<td>National/digital</td>
+<td>Journalism on platforms, AI, corporate power and digital rights</td>
 <td>F</td>
 </tr>
 <tr>
 <td>35</td>
 <td><a href="https://azmina.com.br/revista-azmina/">Instituto AzMina</a></td>
-<td>São Paulo/nacional</td>
-<td>Jornalismo feminista, dados, tecnologias de cuidado e IA feminista</td>
+<td>São Paulo/national</td>
+<td>Feminist journalism, data, care technologies and feminist AI</td>
 <td>N</td>
 </tr>
 <tr>
 <td>36</td>
 <td><a href="https://www.generonumero.media/sobre/">Gênero e Número</a></td>
-<td>Nacional</td>
-<td>Jornalismo e infraestrutura de dados sobre gênero, raça e sexualidade</td>
+<td>National</td>
+<td>Journalism and data infrastructures on gender, race and sexuality</td>
 <td>N</td>
 </tr>
 <tr>
 <td>37</td>
 <td><a href="https://desinformante.com.br/sobre-2/">Desinformante</a></td>
-<td>Nacional/digital</td>
-<td>Produção e circulação de conhecimento sobre desinformação</td>
+<td>National/digital</td>
+<td>Production and circulation of knowledge on disinformation</td>
 <td>F</td>
 </tr>
 <tr>
 <td>38</td>
 <td><a href="https://apublica.org/">Agência Pública</a></td>
-<td>São Paulo/nacional</td>
-<td>Investigação do lobby das big techs, data centers e infraestruturas de IA</td>
+<td>São Paulo/national</td>
+<td>Investigation of Big Tech lobbying, data centres and AI infrastructures</td>
 <td>F</td>
 </tr>
 <tr>
 <td>39</td>
 <td><a href="https://www.aosfatos.org/">Aos Fatos</a></td>
-<td>Nacional</td>
-<td>Verificação, monitoramento de desinformação e desenvolvimento de tecnologias jornalísticas</td>
+<td>National</td>
+<td>Fact-checking, disinformation monitoring and the development of journalistic technologies</td>
 <td>F</td>
 </tr>
 </tbody>
 </table></div>
-<h4 class="table-group-label">5. Infraestruturas cívicas, dados abertos e coalizões/redes</h4>
+<h4 class="table-group-label">5. Civic infrastructures, open data and coalitions/networks</h4>
 <div class="table-wrap"><table class="data-table">
 <thead><tr>
-<th>Nº</th>
-<th>Iniciativa</th>
-<th>Base ou escala</th>
-<th>Atuação principal</th>
-<th>Aderência</th>
+<th>No.</th>
+<th>Initiative</th>
+<th>Base or scale</th>
+<th>Primary area of activity</th>
+<th>Alignment</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>40</td>
 <td><a href="https://ok.org.br/sobre/">Open Knowledge Brasil</a></td>
-<td>Rede nacional</td>
-<td>Dados abertos, conhecimento livre, tecnologia cívica e jornalismo de dados</td>
+<td>National network</td>
+<td>Open data, open knowledge, civic technology and data journalism</td>
 <td>N</td>
 </tr>
 <tr>
 <td>41</td>
 <td><a href="https://brasil.io/home/">Brasil.IO</a></td>
-<td>Comunidade digital/nacional</td>
-<td>Captura, tratamento e disponibilização acessível de dados públicos</td>
+<td>Digital community/national</td>
+<td>Collection, processing and accessible provision of public data</td>
 <td>N</td>
 </tr>
 <tr>
 <td>42</td>
-<td><a href="https://direitosnarede.org.br/quem-somos/">Coalizão Direitos na Rede</a></td>
-<td>Coalizão nacional</td>
-<td>Articulação em direitos digitais, IA, acesso, privacidade e vigilância</td>
+<td><a href="https://direitosnarede.org.br/quem-somos/">Coalition for Rights on the Internet</a></td>
+<td>National coalition</td>
+<td>Coalition-building on digital rights, AI, access, privacy and surveillance</td>
 <td>F</td>
 </tr>
 <tr>
 <td>43</td>
-<td><a href="https://rncd.org/sobre-nos/">Rede Nacional de Combate à Desinformação</a></td>
-<td>Rede nacional distribuída</td>
-<td>Articulação entre pesquisa, comunicação, educação e iniciativas territoriais</td>
+<td><a href="https://rncd.org/sobre-nos/">National Network to Combat Disinformation</a></td>
+<td>Distributed national network</td>
+<td>Coordination among research, communication, education and territorial initiatives</td>
 <td>F</td>
 </tr>
 <tr>
 <td>44</td>
 <td><a href="https://mapbiomas.org/quem-somos/">MapBiomas</a></td>
-<td>Rede multi-institucional brasileira</td>
-<td>Dados geoespaciais abertos, ciência colaborativa e monitoramento territorial</td>
+<td>Brazilian multi-institutional network</td>
+<td>Open geospatial data, collaborative science and territorial monitoring</td>
 <td>A</td>
 </tr>
 </tbody>
@@ -1746,29 +1849,39 @@ mark{ background:rgba(211,160,58,0.22); color:var(--paper); padding:0 2px; borde
 </figure>
 </section>
 
-<section class="section numbered" id="what-the-ai-resist-list-contributesand-what-it-does-not">
+<section class="section numbered" id="resisting-ai">
 <p class="section-number">08</p>
-<h2>What the AI Resist List contributes—and what it does not</h2>
-<p class="kicker">A LIVING REPERTOIRE OF RESISTANCE</p>
-<p>The AI Resist List presents itself as a living, non-comprehensive collection of actions against the 'empire of AI.' Inspired by Choose Democracy's Resist List, it organizes initiatives around the pillars that support AI empires, including narratives, funding, data, resource extraction, data centres, labour, adoption, surveillance and policy. Its initial version was developed between October 2025 and May 2026.</p>
-<p>The list expands the political imagination of AI ethics. Resistance includes strategic litigation, grassroots campaigns, worker refusal, counter-surveillance, digital self-defence, art and storytelling, community-controlled technology, encryption and alternative infrastructures. Drawing on We and AI, it distinguishes four modes: resisting extractive ideologies, refusing targeted uses, reclaiming control, and reimagining collective futures. It also prioritizes examples from the Global Majority and documents a process of reviewing cases, contacting named groups and considering safety risks.</p>
-<h3>What it contributes</h3>
-<ul class="prose-list"><li><p>A vocabulary that treats AI as an empire supported by material and institutional pillars—not only as a model with technical risks.</p></li>
-<li><p>A broad repertoire connecting critique, refusal, community technology, labour action, legal strategy, culture and care.</p></li>
-<li><p>Visibility and potential solidarity for initiatives that are often fragmented or absent from mainstream AI governance debates.</p></li>
-<li><p>A Global Majority emphasis that helps correct the geographic bias of many institutional maps.</p></li>
-<li><p>A useful ethical protocol for curation, including consent, wording checks and attention to retaliation risks.</p></li></ul>
-<h3>What it does not provide</h3>
-<ul class="prose-list"><li><p>A theoretical definition of counter-laboratory or a test for distinguishing one from any critical initiative.</p></li>
-<li><p>A comprehensive census. The curators explicitly present a selected sample rather than a total population.</p></li>
-<li><p>Verified relational data showing collaboration, funding, shared infrastructure or knowledge exchange between listed actors.</p></li>
-<li><p>A consistent ontology separating organizations, projects, campaigns, artifacts, coalitions and media resources.</p></li>
-<li><p>A substitute for interviews, ethnography, hyperlink analysis or the validation of local contexts.</p></li></ul>
-<p>The AI Resist List is therefore best used as a discovery device and conceptual comparator. It can suggest cases, repertoires and infrastructural pillars. The counter-laboratory project adds a different layer: it asks how these actors assemble resources, produce knowledge and technical objects, and become connected through observable relations.</p>
+<h2>Resisting AI</h2>
+<p class="kicker">INTERNATIONAL PROJECTS MAPPING RESISTANCE TO AI</p>
+<p>Resistance to artificial intelligence is becoming an emerging object of research, documentation and public intervention. A growing number of international projects are collecting evidence about how workers, communities, artists, researchers and civil-society organisations contest the development, infrastructures and uses of AI. These projects differ in scope: some assemble examples intended to inspire action, while others produce systematic datasets, analytical classifications or sector-specific mappings.</p>
+<p>The <a href="https://airesistlist.com/" target="_blank" rel="noopener">AI Resist List</a> is one of the broadest public attempts to document this emerging field. It presents resistance not simply as opposition to technology, but as action against the material and institutional “pillars” supporting dominant AI systems: narratives, funding, data, data centres, resource extraction, labour, adoption, surveillance and policy. Its repertoire includes litigation, strikes, public campaigns, data poisoning, technological refusal, community-controlled infrastructures and the construction of alternative futures.</p>
+<p>However, its geographical coverage remains highly uneven. As of September 2026, a manual count identifies 31 initiatives in the Resist List itself. Only three are located in Latin America, including just one in Brazil: the campaign against Google’s data centre in Uruguay; Quili.ai in Chile; and O Panóptico in Brazil. A separate section on “Possible Futures” includes Hire a COOP, a transnational initiative involving cooperatives in Brazil and Argentina, but it is not part of the main Resist List. This limited presence is significant because the project explicitly aims to prioritise the Global Majority. It suggests that the public visibility of resistance remains shaped by linguistic, institutional and informational asymmetries, rather than necessarily reflecting the actual density of mobilisation in these territories.</p>
+<p>A more specialised and systematic initiative is <a href="https://creativelabourcriticalfutures.ca/resource-files/tracker-ai-mobilization-clcf.html" target="_blank" rel="noopener">Worker Mobilizations around AI in Arts, Culture, and Media</a>, developed within the Creative Labour and Critical Futures research cluster at the University of Toronto Scarborough. The tracker documents 142 worker organisations in 34 countries and eight cultural sectors, recording their arguments, repertoires of action, negotiations, agreements and other outcomes. Latin America accounts for 11 per cent of the organisations mapped. Its focus is narrower than that of the AI Resist List, but its data structure, source documentation and participatory verification provide a stronger basis for comparative research into worker-led AI governance. The project is itself included in the AI Resist List, demonstrating the connections already emerging between these different mapping efforts.</p>
+<p>Another relevant academic initiative is the <a href="https://acatracker.org/" target="_blank" rel="noopener">Algorithmic Collective Action Repository</a>, developed through research at the ELLIS Institute Tübingen. It currently documents 126 real-world cases and references 49 research papers and related initiatives. Rather than mapping every form of resistance to AI, it examines how groups act collectively within algorithmically mediated systems. Its taxonomy distinguishes interventions across stages of the AI lifecycle—including data collection, training, deployment and evaluation—and classifies how participants acquire knowledge, coordinate action and attempt to influence algorithmic systems. The repository also explicitly acknowledges the over-representation of Europe and North America and the comparative absence of South America, Africa, the Middle East and other regions.</p>
+<p>The Sciences Po research paper <a href="https://www.sciencespo.fr/public/chaire-numerique/en/2025/05/27/research-paper-ai-rejection/" target="_blank" rel="noopener"><em>From Rejection to Regulation: Mapping the Landscape of AI Resistance</em></a> provides a complementary analytical approach. Rather than maintaining a living database, it compares resistance across six fields: creative industries, migration and borders, healthcare, higher education, defence and security, and environmental activism. It identifies five major drivers of resistance: socio-economic consequences, ethical harms, safety concerns, threats to democracy and sovereignty, and environmental impacts. The study is particularly useful for situating individual mobilisations within a broader conceptual and political framework.</p>
+<p>Taken together, these projects reveal a field that is expanding but remains fragmented. The AI Resist List maps a broad repertoire of resistance; the Creative Labour and Critical Futures tracker offers sectoral depth and structured evidence; the Algorithmic Collective Action Repository focuses on collective interventions within algorithmic systems; and the Sciences Po study develops a cross-sectoral analytical framework. Yet none provides a dense account of the Brazilian field, and Latin American experiences remain comparatively under-represented.</p>
+<p>The Counter-Laboratories for the AI Commons project responds to this gap by identifying 44 initiatives in Brazil alone. It asks not only how actors oppose particular AI systems, but also how they produce knowledge, reclaim data and technical capacity, construct alternative infrastructures and experiment with collective forms of technological governance. In this sense, Brazil does not appear as a peripheral recipient of international debates, but as a dense field of sociotechnical resistance and experimentation.</p>
+</section>
+
+<section class="section numbered" id="next-steps-mapping-controversies-and-pedagogies-of-the-ai-commons">
+<p class="section-number">09</p>
+<h2>Next steps: mapping controversies and pedagogies of the AI commons</h2>
+<p class="kicker">FROM DOCUMENTING INITIATIVES TO FOLLOWING DISPUTES, CREATING ALTERNATIVE VISUALITIES AND PRODUCING SHARED KNOWLEDGE</p>
+<p>The next phase of the research will move beyond identifying and classifying initiatives. It will examine how counter-laboratories intervene in controversies, how these disputes can be represented through alternative forms of mapping, and how their practices may contribute to the development of pedagogies of the AI commons.</p>
+<h3>1. Producing a controversy mapping</h3>
+<p>The next step will be to identify how the initiatives contest Big Tech companies, government institutions and dominant technological arrangements. This involves examining not only which actors are criticised, but also what precisely is at stake in each dispute: data extraction, surveillance, labour exploitation, environmental impacts, automated discrimination, platform dependency, epistemic inequalities or the concentration of technological power.</p>
+<p>In this research, controversy is not restricted to disagreements within the scientific field. The concept is extended to sociotechnical disputes in which different actors struggle to define a problem, establish relevant evidence, represent affected groups and determine which technological futures are considered possible. A controversy may therefore involve social movements, researchers, workers, communities, governments, companies, technical systems, legal instruments and material infrastructures.</p>
+<h3>2. Mapping as a technical-aesthetic artifact</h3>
+<p>The second step will treat mapping not merely as a method for displaying research results, but as a <strong>technical-aesthetic artifact</strong>. Conventional network visualisations frequently reproduce the visual language of automated systems: centralised graphs, data-driven hierarchies and seemingly objective representations produced through computational abstraction.</p>
+<p>The project will experiment with mappings that are less governed by AI-generated classifications and automated layouts, while still making complex relations accessible. This may involve combining digital visualisation with situated descriptions, manually curated pathways, narrative maps, collective annotation and other forms of visual composition.</p>
+<h3>3. Deepening the idea of pedagogies of the AI commons</h3>
+<p>The third step concerns the theoretical development of <strong>pedagogies of the AI commons</strong>. Counter-laboratories do more than criticise dominant AI systems. Through workshops, investigations, community technologies, collective archives, public campaigns and experimental infrastructures, they produce knowledge about how AI works, whom it benefits and how it might be organised differently.</p>
+<p>Pedagogies of the AI commons can be understood as practices through which communities collectively learn to investigate, contest, appropriate, redesign or refuse AI systems. They connect critical literacy with the capacity to act: opening technical black boxes, making infrastructures and labour visible, recognising situated forms of knowledge and creating shared criteria for technological decision-making.</p>
+<p>This perspective also expands the meaning of AI literacy. Instead of preparing individuals only to adapt to existing systems, it asks how educational practices can strengthen collective agency over data, infrastructures, technical knowledge and technological futures. Learning about AI thus becomes inseparable from learning how to participate in its governance—and how to imagine forms of computation grounded in democratic control, care, social justice and epistemic diversity.</p>
 </section>
 
 <section class="section numbered" id="from-a-catalogue-of-initiatives-to-a-multilayer-network">
-<p class="section-number">09</p>
+<p class="section-number">10</p>
 <h2>From a catalogue of initiatives to a multilayer network</h2>
 <p class="kicker">MAPPING ASSOCIATIONS WITHOUT INVENTING TIES</p>
 <p>A network visualization should not begin by connecting organizations merely because they share a theme. Semantic proximity is not the same as a social relation. The map must preserve the evidence for every edge and distinguish between declared collaboration, technical dependency, hyperlink citation, shared participation and the researcher's own analytical coding.</p>
@@ -1784,7 +1897,7 @@ mark{ background:rgba(211,160,58,0.22); color:var(--paper); padding:0 2px; borde
 </section>
 
 <section class="section numbered" id="ethical-ai-emerges-from-alternative-modes-of-production">
-<p class="section-number">10</p>
+<p class="section-number">11</p>
 <h2>AI commons emerges from alternative modes of production</h2>
 <p class="kicker">ETHICS AS INFRASTRUCTURE</p>
 <p>The counter-laboratory perspective does not reject fairness, transparency, accountability or safety. It relocates them. These values are not only qualities to verify at the end of a development pipeline; they must be built into decisions about what is produced, which data is collected, how labour is organized, who owns the infrastructure and who can govern or refuse the system.</p>
@@ -1801,12 +1914,14 @@ mark{ background:rgba(211,160,58,0.22); color:var(--paper); padding:0 2px; borde
 <p class="kicker">CONCEPTUAL AND METHODOLOGICAL SOURCES</p>
 <p>Couldry, N., &amp; Mejias, U. A. (2019). Data colonialism: Rethinking big data's relation to the contemporary subject. Television &amp; New Media, 20(4), 336–349. <a href="https://doi.org/10.1177/1527476418796632">https://doi.org/10.1177/1527476418796632</a></p>
 <p>Corrêa, F., &amp; Cocco, G. (2024). Discussion of algorithms as open technical beings and algorithms of the commons, cited in the UFRJ project manuscript.</p>
+<p>Grohmann, R., &amp; Wright, H. (2026). Mapping worker-led AI governance in the global cultural industries. <em>Media, Culture &amp; Society</em>. <a href="https://doi.org/10.1177/01634437261470733">https://doi.org/10.1177/01634437261470733</a></p>
 <p>Hui, Y. (2020). Technodiversity. <a href="https://www.e-flux.com/journal/123/436915/for-a-planetary-thinking/">https://www.e-flux.com/journal/123/436915/for-a-planetary-thinking/</a></p>
 <p>Jobin, A., Ienca, M., &amp; Vayena, E. (2019). The global landscape of AI ethics guidelines. Nature Machine Intelligence, 1, 389–399. <a href="https://doi.org/10.1038/s42256-019-0088-2">https://doi.org/10.1038/s42256-019-0088-2</a></p>
 <p>Latour, B. (2000). Ciência em ação: Como seguir cientistas e engenheiros sociedade afora. São Paulo: UNESP.</p>
 <p>Mittelstadt, B. (2019). Principles alone cannot guarantee ethical AI. Nature Machine Intelligence, 1, 501–507. <a href="https://doi.org/10.1038/s42256-019-0114-4">https://doi.org/10.1038/s42256-019-0114-4</a></p>
 <p>Pilati, F., &amp; Venturini, T. (2025). Web mapping of AI initiatives against disinformation. Frontiers in Political Science. <a href="https://doi.org/10.3389/fpos.2025.1517726">https://doi.org/10.3389/fpos.2025.1517726</a></p>
 <p>Simondon, G. (2020). Do modo de existência dos objetos técnicos. Rio de Janeiro: Contraponto.</p>
+<p>Şimşek, C., &amp; Yaşar, A. G. (2025). <em>From Rejection to Regulation: Mapping the Landscape of AI Resistance</em>. Sciences Po Chair Digital, Governance and Sovereignty. <a href="https://www.sciencespo.fr/public/chaire-numerique/en/2025/05/27/research-paper-ai-rejection/">https://www.sciencespo.fr/public/chaire-numerique/en/2025/05/27/research-paper-ai-rejection/</a></p>
 <p>Venturini, T. (2012). Building on faults: How to represent controversies with digital methods. Public Understanding of Science, 21(7), 796–812. <a href="https://doi.org/10.1177/0963662510387558">https://doi.org/10.1177/0963662510387558</a></p>
 <p>Venturini, T., &amp; Munk, A. K. (2022). Controversy Mapping: A Field Guide. Polity.</p>
 <p>Zuboff, S. (2019). The Age of Surveillance Capitalism. PublicAffairs.</p>
@@ -1826,6 +1941,8 @@ mark{ background:rgba(211,160,58,0.22); color:var(--paper); padding:0 2px; borde
 <p class="kicker">INITIATIVES AND FIELD RESOURCES</p>
 <ul class="link-grid">
 <li><a href="https://airesistlist.com/" target="_blank" rel="noopener">AI Resist List</a></li>
+<li><a href="https://creativelabourcriticalfutures.ca/resource-files/tracker-ai-mobilization-clcf.html" target="_blank" rel="noopener">Worker Mobilizations around AI in Arts, Culture, and Media</a></li>
+<li><a href="https://acatracker.org/" target="_blank" rel="noopener">Algorithmic Collective Action Repository</a></li>
 <li><a href="https://ok.org.br/" target="_blank" rel="noopener">Open Knowledge Brasil</a></li>
 <li><a href="https://codingrights.org/" target="_blank" rel="noopener">Coding Rights</a></li>
 <li><a href="https://azmina.com.br/" target="_blank" rel="noopener">AzMina</a></li>
